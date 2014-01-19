@@ -98,6 +98,11 @@ public class CardCursorScrollAdapter extends CardScrollAdapter implements CardCu
         mNewCardCallback = callback;
     }
 
+    @Override
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
     private Card newCard(Cursor cursor) {
         return mNewCardCallback.newCard(cursor);
     }

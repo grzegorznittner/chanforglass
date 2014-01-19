@@ -51,7 +51,7 @@ public class JSONUtils {
         return cursor;
     }
 
-    private static Object mapJson(JSONObject oneObject, String key, JSONType type) {
+    public static Object mapJson(JSONObject oneObject, String key, JSONType type) {
         try {
             switch (type) {
                 default:
@@ -63,6 +63,14 @@ public class JSONUtils {
                     return oneObject.getLong(key);
                 case BOOLEAN:
                     return oneObject.getBoolean(key);
+                case OPT_STRING:
+                    return oneObject.optString(key);
+                case OPT_INTEGER:
+                    return oneObject.optInt(key);
+                case OPT_LONG:
+                    return oneObject.optLong(key);
+                case OPT_BOOLEAN:
+                    return oneObject.optBoolean(key);
             }
         }
         catch (JSONException e) {
@@ -71,7 +79,7 @@ public class JSONUtils {
         }
     }
 
-    private static JSONObject readJson(String url) {
+    public static JSONObject readJson(String url) {
         StringBuilder builder = new StringBuilder();
         HttpClient client = new DefaultHttpClient(new BasicHttpParams());
         HttpGet httpGet = new HttpGet(url);

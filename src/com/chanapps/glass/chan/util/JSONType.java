@@ -11,5 +11,9 @@ public enum JSONType {
     STRING,
     INTEGER,
     LONG,
-    BOOLEAN
+    BOOLEAN,
+    OPT_STRING,
+    OPT_INTEGER,
+    OPT_LONG,
+    OPT_BOOLEAN
 }

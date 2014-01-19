@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.database.Cursor;
 import com.chanapps.glass.chan.ChanBoardListActivity;
+import com.chanapps.glass.chan.model.CursorLoadCallback;
 
 /**
 * Created with IntelliJ IDEA.
@@ -14,24 +15,16 @@ import com.chanapps.glass.chan.ChanBoardListActivity;
 */
 public class JsonCursorLoader extends CursorLoader {
     private Cursor mData;
-    private String mUrl;
-    private String[] mColumns;
-    private JSONType[] mTypes;
-    private String mRootKey;
-    private int mInitialCapacity;
+    private CursorLoadCallback mCursorLoadCallback;
 
-    public JsonCursorLoader(Context ctx, String url, String[] columns, JSONType[] types, String rootKey, int initialCapacity) {
+    public JsonCursorLoader(Context ctx, CursorLoadCallback cursorLoadCallback) {
         super(ctx);
-        mUrl = url;
-        mColumns = columns;
-        mTypes = types;
-        mRootKey = rootKey;
-        mInitialCapacity = initialCapacity;
+        mCursorLoadCallback = cursorLoadCallback;
     }
 
     @Override
     public Cursor loadInBackground() {
-        return JSONUtils.loadCursorFromJson(mUrl, mColumns, mTypes, mRootKey, mInitialCapacity);
+        return mCursorLoadCallback.loadCursor();
     }
 
     @Override

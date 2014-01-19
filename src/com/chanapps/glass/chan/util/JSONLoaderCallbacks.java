@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import com.chanapps.glass.chan.model.CursorLoadCallback;
 import com.google.android.glass.widget.CardScrollView;
 
 /**
@@ -22,32 +23,23 @@ public class JSONLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor
     private ProgressBar mProgressBar;
     private CardCursorAdapter mAdapter;
     private CardScrollView mCardScrollView;
-    private String mUrl;
-    private String[] mColumns;
-    private JSONType[] mTypes;
-    private String mRootKey;
-    private int mInitialCapacity;
+    private CursorLoadCallback mCursorLoadCallback;
     private int mLoaderId;
 
     public JSONLoaderCallbacks(Context context,
                                CardCursorAdapter adapter, ProgressBar progressBar, CardScrollView cardScrollView,
-                               String url, String[] columns, JSONType[] types,
-                               String rootKey, int initialCapacity, int loaderId) {
+                               CursorLoadCallback cursorLoadCallback, int loaderId) {
         mContext = context;
         mAdapter = adapter;
         mProgressBar = progressBar;
         mCardScrollView = cardScrollView;
-        mUrl = url;
-        mColumns = columns;
-        mTypes = types;
-        mRootKey = rootKey;
-        mInitialCapacity = initialCapacity;
+        mCursorLoadCallback = cursorLoadCallback;
         mLoaderId = loaderId;
     }
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (id == mLoaderId)
-            return new JsonCursorLoader(mContext, mUrl, mColumns, mTypes, mRootKey, mInitialCapacity);
+            return new JsonCursorLoader(mContext, mCursorLoadCallback);
         else
             return null;
     }

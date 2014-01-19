@@ -43,6 +43,12 @@
                 />
 
         <activity
+                android:name=".ChanBoardActivity"
+                android:icon="@drawable/app_icon_50x50"
+                android:label="@string/view_board"
+                />
+
+        <activity
                 android:name=".ChanMenuActivity"
                 android:theme="@style/MenuTheme"
                 android:icon="@drawable/app_icon_50x50"

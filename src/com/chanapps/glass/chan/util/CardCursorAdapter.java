@@ -13,6 +13,7 @@ import com.google.android.glass.app.Card;
 */
 public interface CardCursorAdapter {
     Cursor swapCursor(Cursor data);
+    Cursor getCursor();
     void setIdColumn(String column);
     void setNewCardCallback(NewCardCallback callback);
     public interface NewCardCallback {

@@ -20,8 +20,7 @@
     <string name="app_name">Chan for Glass</string>
     <string name="app_mantra">4chan Reloaded</string>
     <string name="show_root_card_voice_trigger">listen to</string>
-
-    <string name="loading">Loading...</string>
+    <string name="view_board">View Board</string>
 
     <!-- Strings describing locations. -->
     <string-array name="direction_abbreviations">
