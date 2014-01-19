@@ -21,6 +21,8 @@
     <string name="app_mantra">4chan Reloaded</string>
     <string name="show_root_card_voice_trigger">listen to</string>
 
+    <string name="loading">Loading...</string>
+
     <!-- Strings describing locations. -->
     <string-array name="direction_abbreviations">
         <item>N</item>
