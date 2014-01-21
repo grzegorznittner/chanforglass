@@ -29,10 +29,11 @@ public class JSONUtils {
 
     public static Cursor loadCursorFromJson(String url, String[] columns, JSONType[] types, String rootKey, int initialCapacity) {
         MatrixCursor cursor = new MatrixCursor(columns, initialCapacity);
-        JSONObject rootObject = readJson(url);
-        if (rootObject == null)
-            return cursor;
+        JSONObject rootObject;
         try {
+            rootObject = JSONUtils.readJsonObject(url);
+            if (rootObject == null)
+                return cursor;
             JSONArray jsonArray = rootObject.getJSONArray(rootKey);
             for (int i=0; i < jsonArray.length(); i++) {
                 JSONObject oneObject = jsonArray.getJSONObject(i);
@@ -46,7 +47,7 @@ public class JSONUtils {
                 cursor.addRow(row);
             }
         } catch (Exception e) {
-            Log.e(TAG, "Exception reading json: " + rootObject, e);
+            Log.e(TAG, "Exception reading json", e);
         }
         return cursor;
     }
@@ -79,13 +80,37 @@ public class JSONUtils {
         }
     }
 
-    public static JSONObject readJson(String url) {
+    public static JSONObject readJsonObject(String url) {
+        JSONObject jsonObject = null;
+        try {
+            String json = readJson(url);
+            if (json != null && !json.isEmpty())
+                jsonObject = new JSONObject(json);
+        } catch (JSONException e) {
+            Log.e(TAG, "JSONException reading json", e);
+        }
+        return jsonObject;
+    }
+
+    public static JSONArray readJsonArray(String url) {
+        JSONArray jsonArray = null;
+        try {
+            String json = readJson(url);
+            if (json != null && !json.isEmpty())
+                jsonArray = new JSONArray(json);
+        } catch (JSONException e) {
+            Log.e(TAG, "JSONException reading json", e);
+        }
+        return jsonArray;
+    }
+
+    private static String readJson(String url) {
         StringBuilder builder = new StringBuilder();
         HttpClient client = new DefaultHttpClient(new BasicHttpParams());
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader(CONTENT_TYPE_HEADER, JSON_MIME_TYPE);
         String line = "";
-        JSONObject jsonObject = null;
+        String json = null;
         try {
             HttpResponse response = client.execute(httpGet);
             StatusLine statusLine = response.getStatusLine();
@@ -94,11 +119,9 @@ public class JSONUtils {
                 HttpEntity entity = response.getEntity();
                 InputStream content = entity.getContent();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-                while ((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null)
                     builder.append(line);
-                }
-                String json = builder.toString();
-                jsonObject = new JSONObject(json);
+                json = builder.toString();
             } else {
                 Log.e(TAG, "Invalid status=" + statusCode + " getting url=" + url + "");
             }
@@ -106,10 +129,8 @@ public class JSONUtils {
             Log.e(TAG, "ClientProtocolException reading json last line=" + line, e);
         } catch (IOException e) {
             Log.e(TAG, "IOException reading json last line=" + line, e);
-        } catch (JSONException e) {
-            Log.e(TAG, "JSONException reading json last line=" + line, e);
         }
-        return jsonObject;
+        return json;
     }
 
 }

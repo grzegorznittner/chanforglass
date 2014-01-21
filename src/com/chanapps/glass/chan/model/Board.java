@@ -13,8 +13,11 @@ public class Board {
 
     private static final String TAG = Board.class.getSimpleName();
 
-    public static final String URL_FORMAT = "https://a.4cdn.org/%1$s/0.json";
-    public static final int INITIAL_CAPACITY = 20;
+    public static final String PAGE_URL_FORMAT = "https://a.4cdn.org/%1$s/0.json";
+    public static final String CATALOG_URL_FORMAT = "https://a.4cdn.org/%1$s/catalog.json";
+    public static final String THUMBNAIL_FORMAT = "https://t.4cdn.org/%1$s/thumb/%2$ds.jpg";
+    public static final int INITIAL_PAGE_CAPACITY = 20;
+    public static final int INITIAL_CATALOG_CAPACITY = 170;
     public static final String THREADS_KEY = "threads";
     public static final String POSTS_KEY = "posts";
     public static final String BOARD_COLUMN = "board";
@@ -43,14 +46,15 @@ public class Board {
             JSONType.OPT_INTEGER
     };
 
-    public Cursor loadCursor(String board) {
-        String url = String.format(URL_FORMAT, board);
+    public Cursor loadPageCursor(String board) {
+        String url = String.format(PAGE_URL_FORMAT, board);
 
-        MatrixCursor cursor = new MatrixCursor(COLUMNS, INITIAL_CAPACITY);
-        JSONObject rootObject = JSONUtils.readJson(url);
-        if (rootObject == null)
-            return cursor;
+        MatrixCursor cursor = new MatrixCursor(COLUMNS, INITIAL_PAGE_CAPACITY);
+        JSONObject rootObject = null;
         try {
+            rootObject = JSONUtils.readJsonObject(url);
+            if (rootObject == null)
+                return cursor;
             JSONArray threadsArray = rootObject.getJSONArray(THREADS_KEY);
             //Log.e(TAG, "reading threadsArray=" + threadsArray);
             for (int i=0; i < threadsArray.length(); i++) {
@@ -72,6 +76,36 @@ public class Board {
             }
         } catch (JSONException e) {
             Log.e(TAG, "Exception reading json: " + rootObject, e);
+        }
+        return cursor;
+    }
+
+    public Cursor loadCatalogCursor(String board) {
+        String url = String.format(CATALOG_URL_FORMAT, board);
+        MatrixCursor cursor = new MatrixCursor(COLUMNS, INITIAL_CATALOG_CAPACITY);
+        JSONArray rootArray = null;
+        try {
+            rootArray = JSONUtils.readJsonArray(url);
+            if (rootArray == null)
+                return cursor;
+            for (int i = 0; i < rootArray.length(); i++) {
+                JSONObject pageObject = rootArray.getJSONObject(i);
+                JSONArray threadsArray = pageObject.getJSONArray(THREADS_KEY);
+                for (int j=0; j < threadsArray.length(); j++) {
+                    JSONObject threadObject = threadsArray.getJSONObject(j);
+                    Object[] row = new Object[COLUMNS.length];
+                    row[0] = board;
+                    for (int k = 1; k < COLUMNS.length; k++) {
+                        String key = COLUMNS[k];
+                        JSONType type = TYPES[k];
+                        Object obj = JSONUtils.mapJson(threadObject, key, type);
+                        row[k] = obj;
+                    }
+                    cursor.addRow(row);
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Exception reading json: " + rootArray, e);
         }
         return cursor;
     }

@@ -21,7 +21,7 @@ public class ChanBoardListActivity extends Activity {
 
     private static final String TAG = ChanBoardListActivity.class.getSimpleName();
     private static final int LOADER_ID = 1;
-    private static final String BOARD_TEXT_FORMAT = "/%1$s/";
+    private static final String BOARD_TEXT_FORMAT = "/%1$s/ %2$s";
 
     private ProgressBar mProgressBar;
     private CardScrollView mCardScrollView;
@@ -43,8 +43,10 @@ public class ChanBoardListActivity extends Activity {
             @Override
             public Card newCard(Cursor cursor) {
                 Card card = new Card(ChanBoardListActivity.this);
-                card.setText(String.format(BOARD_TEXT_FORMAT, cursor.getString(cursor.getColumnIndex(BoardList.BOARD_COLUMN))));
-                card.setFootnote(cursor.getString(cursor.getColumnIndex(BoardList.TITLE_COLUMN)));
+                card.setText(String.format(BOARD_TEXT_FORMAT,
+                        cursor.getString(cursor.getColumnIndex(BoardList.BOARD_COLUMN)),
+                        cursor.getString(cursor.getColumnIndex(BoardList.TITLE_COLUMN))));
+                card.setFootnote(getString(R.string.app_name));
                 return card;
             }
         });

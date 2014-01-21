@@ -19,8 +19,14 @@
     <!-- Launch-related strings. -->
     <string name="app_name">Chan for Glass</string>
     <string name="app_mantra">4chan Reloaded</string>
-    <string name="show_root_card_voice_trigger">listen to</string>
+    <string name="show_root_card_voice_trigger">post an update</string> <!-- really wish we had "Read" -->
     <string name="view_board">View Board</string>
+    <string name="view_thread">View Thread</string>
+    <string name="board_footnote_format">/%1$s/ ~ %2$d of %3$d ~ %4$d posts %5$d images</string>
+    <string name="thread_footnote_format">/%1$s/%2$d ~ %3$d of %4$d</string>
+    <string name="thread_with_image_footnote_format">/%1$s/%2$d ~ %3$d of %4$d ~ %5$s%6$s %7$s</string>
+    <string name="mb_abbrev">MB</string>
+    <string name="kb_abbrev">KB</string>
 
     <!-- Strings describing locations. -->
     <string-array name="direction_abbreviations">
