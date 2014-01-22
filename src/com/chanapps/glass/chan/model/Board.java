@@ -56,14 +56,10 @@ public class Board {
             if (rootObject == null)
                 return cursor;
             JSONArray threadsArray = rootObject.getJSONArray(THREADS_KEY);
-            //Log.e(TAG, "reading threadsArray=" + threadsArray);
             for (int i=0; i < threadsArray.length(); i++) {
                 JSONObject threadObject = threadsArray.getJSONObject(i);
-                //Log.e(TAG, "reading threadObject=" + threadObject);
                 JSONArray postsArray = threadObject.getJSONArray(POSTS_KEY);
-                //Log.e(TAG, "reading postsArray=" + postsArray);
                 JSONObject firstPost = postsArray.getJSONObject(0);
-                //Log.e(TAG, "reading firstPost=" + firstPost);
                 Object[] row = new Object[COLUMNS.length];
                 row[0] = board;
                 for (int j = 1; j < COLUMNS.length; j++) {

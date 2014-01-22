@@ -22,6 +22,7 @@
     <string name="show_root_card_voice_trigger">post an update</string> <!-- really wish we had "Read" -->
     <string name="view_board">View Board</string>
     <string name="view_thread">View Thread</string>
+    <string name="view_image">View Image</string>
     <string name="board_footnote_format">/%1$s/ ~ %2$d of %3$d ~ %4$d posts %5$d images</string>
     <string name="thread_footnote_format">/%1$s/%2$d ~ %3$d of %4$d</string>
     <string name="thread_with_image_footnote_format">/%1$s/%2$d ~ %3$d of %4$d ~ %5$s%6$s %7$s</string>
@@ -76,7 +77,10 @@
     <string name="magnetic_interference">Glass is detecting too much interference</string>
 
     <!-- Menu item strings. -->
+    <string name="read_more">Read more</string>
     <string name="read_aloud">Read aloud</string>
+    <string name="show_nsfw">Show NSFW</string>
+    <string name="hide_nsfw">Hide NSFW</string>
     <string name="stop">Stop</string>
 
 </resources>

@@ -40,8 +40,14 @@
         <activity
                 android:name=".ChanBoardListActivity"
                 android:icon="@drawable/app_icon_bw_50x50"
-                android:label="@string/app_name"
-                />
+                android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
+            </intent-filter>
+            <meta-data
+                    android:name="com.google.android.glass.VoiceTrigger"
+                    android:resource="@xml/root_card_show" />
+        </activity>
 
         <activity
                 android:name=".ChanBoardActivity"
@@ -52,29 +58,23 @@
         <activity
                 android:name=".ChanThreadActivity"
                 android:icon="@drawable/app_icon_bw_50x50"
-                android:label="@string/view_board"
+                android:label="@string/view_thread"
                 />
 
         <activity
-                android:name=".ChanMenuActivity"
-                android:theme="@style/MenuTheme"
+                android:name=".ChanImageActivity"
                 android:icon="@drawable/app_icon_bw_50x50"
-                android:label="@string/app_name"
+                android:label="@string/view_image"
                 />
 
+        <!--
         <service
                 android:name=".ChanService"
                 android:label="@string/app_name"
                 android:icon="@drawable/app_icon_bw_50x50"
                 android:enabled="true" >
-            <intent-filter>
-                <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
-            </intent-filter>
-            <meta-data
-                    android:name="com.google.android.glass.VoiceTrigger"
-                    android:resource="@xml/root_card_show" />
         </service>
-
+        -->
     </application>
 
 </manifest>

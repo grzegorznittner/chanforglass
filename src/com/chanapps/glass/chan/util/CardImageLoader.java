@@ -3,6 +3,7 @@ package com.chanapps.glass.chan.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import com.google.android.glass.app.Card;
@@ -41,6 +42,17 @@ public class CardImageLoader {
 
     public static void loadCardImage(final Card card, Card.ImageLayout imageLayout, final String imageUri,
                                      final CardScrollView cardScrollView) {
+        loadCardImage(card, imageLayout, imageUri, new Runnable() {
+            @Override
+            public void run() {
+                if (cardScrollView != null)
+                    cardScrollView.updateViews(true);
+            }
+        });
+    }
+
+    public static void loadCardImage(final Card card, Card.ImageLayout imageLayout, final String imageUri,
+                                     final Runnable callback) {
         card.setImageLayout(imageLayout);
         int failures = mLoadFailures.containsKey(imageUri) ? mLoadFailures.get(imageUri) : 0;
         if (failures > MAX_IMAGE_LOAD_RETRIES) {
@@ -73,8 +85,7 @@ public class CardImageLoader {
                             + " len=" + (file == null ? 0 : file.length()));
                     if (file != null && file.exists() && file.length() > 0) {
                         if (DEBUG) Log.i(TAG, "onLoadingComplete scheduling update of scroll views");
-                        if (cardScrollView != null)
-                            cardScrollView.updateViews(true);
+                        (new Handler()).post(callback);
                     }
                 }
 

@@ -43,15 +43,19 @@ public class BoardList {
             JSONType.STRING,
             JSONType.INTEGER
     };
+    public static final int WS_BOARD_WORKSAFE_COL = 2;
+    public static final int WS_BOARD_WORKSAFE = 1;
 
-    public Cursor loadCursor() {
+    public Cursor loadCursor(boolean showNSFW) {
         List<BoardRow> rows = loadListFromJson(URL, COLUMNS, TYPES, BOARDS_KEY, INITIAL_CAPACITY);
         if (DEBUG) Log.i(TAG, "first row:" + rows.get(0));
         Collections.sort(rows, new AlphanumComparator<BoardRow>());
         if (DEBUG) Log.i(TAG, "first row after sort:" + rows.get(0));
         MatrixCursor cursor =  new MatrixCursor(COLUMNS, rows.size());
-        for (BoardRow row : rows)
-            cursor.addRow(row.mRow);
+        for (BoardRow row : rows) {
+            if (showNSFW || row.isWorksafe())
+                cursor.addRow(row.mRow);
+        }
         return cursor;
     }
 
@@ -91,6 +95,12 @@ public class BoardList {
                 return (String)mRow[0];
             else
                 return "";
+        }
+        public boolean isWorksafe() {
+            Object o = mRow[WS_BOARD_WORKSAFE_COL];
+            if (o == null || !(o instanceof Integer))
+                return false;
+            return (Integer)mRow[WS_BOARD_WORKSAFE_COL] == WS_BOARD_WORKSAFE;
         }
     }
 
