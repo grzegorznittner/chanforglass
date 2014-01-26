@@ -18,4 +18,10 @@
 
     <dimen name="card_margin">40px</dimen>
 
+    <dimen name="card_main_layout_main_width">560px</dimen>
+    <dimen name="card_main_layout_main_height">240px</dimen>
+    <dimen name="card_main_layout_main_min_textSize">30px</dimen>
+    <dimen name="card_main_layout_footnote_width">560px</dimen>
+    <dimen name="card_main_layout_footnote_height">40px</dimen>
+
 </resources>

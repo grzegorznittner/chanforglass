@@ -25,10 +25,10 @@
         android:id="@+id/read_more"
         android:title="@string/read_more"
         android:icon="@drawable/ic_message_50"
-            android:visible="false"
             />
     <item
         android:id="@+id/read_aloud"
         android:title="@string/read_aloud"
-        android:icon="@drawable/ic_read_aloud"/>
+        android:icon="@drawable/ic_read_aloud"
+            />
 </menu>

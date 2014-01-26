@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import com.chanapps.glass.chan.model.Board;
@@ -100,6 +101,28 @@ public class ChanBoardActivity extends Activity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.view_image);
+        item.setVisible(currentSelectionIsImage());
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private boolean currentSelectionIsImage() {
+        if (mCardScrollView == null || mAdapter == null)
+            return false;
+        int pos = mCardScrollView.getSelectedItemPosition();
+        if (pos < 0)
+            return false;
+        Cursor cursor = mAdapter.getCursor();
+        if (cursor == null || !cursor.moveToPosition(pos))
+            return false;
+        long fsize = cursor.getLong(cursor.getColumnIndex(Board.FSIZE_COLUMN));
+        if (fsize <= 0)
+            return false;
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Cursor cursor;
         switch (item.getItemId()) {
@@ -114,16 +137,33 @@ public class ChanBoardActivity extends Activity {
                 intent.putExtra(Board.NO_COLUMN, no);
                 startActivity(intent);
                 return true;
+            case R.id.view_image:
+                cursor = mAdapter.getCursor();
+                if (cursor == null || !cursor.moveToPosition(mCurrentPosition))
+                    return true;
+                board = cursor.getString(cursor.getColumnIndex(Board.BOARD_COLUMN));
+                long tim = cursor.getLong(cursor.getColumnIndex(Board.TIM_COLUMN));
+                String ext = cursor.getString(cursor.getColumnIndex(Board.EXT_COLUMN));
+                intent = new Intent(this, ChanImageActivity.class);
+                intent.putExtra(Board.BOARD_COLUMN, board);
+                intent.putExtra(Board.TIM_COLUMN, tim);
+                intent.putExtra(Board.EXT_COLUMN, ext);
+                startActivity(intent);
+                return true;
             case R.id.read_more:
                 cursor = mAdapter.getCursor();
                 if (cursor == null || !cursor.moveToPosition(mCurrentPosition))
                     return true;
+                String text = mBoardView.formattedSubCom(cursor);
+                intent = new Intent(this, ChanTextActivity.class);
+                intent.putExtra(ChanTextActivity.TEXT, text);
+                startActivity(intent);
                 return true;
             case R.id.read_aloud:
                 cursor = mAdapter.getCursor();
                 if (cursor == null || !cursor.moveToPosition(mCurrentPosition))
                     return true;
-                String text = mBoardView.formattedSubCom(cursor);
+                text = mBoardView.formattedSubCom(cursor);
                 mSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
                 return true;
             default:

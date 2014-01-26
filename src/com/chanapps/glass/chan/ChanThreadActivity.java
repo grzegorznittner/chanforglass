@@ -147,11 +147,20 @@ public class ChanThreadActivity extends Activity {
                 intent.putExtra(ChanThread.EXT_COLUMN, ext);
                 startActivity(intent);
                 return true;
-            case R.id.read_aloud:
+            case R.id.read_more:
                 cursor = mAdapter.getCursor();
                 if (cursor == null || !cursor.moveToPosition(mCurrentPosition))
                     return true;
                 String text = mChanThreadView.formattedSubCom(cursor);
+                intent = new Intent(this, ChanTextActivity.class);
+                intent.putExtra(ChanTextActivity.TEXT, text);
+                startActivity(intent);
+                return true;
+            case R.id.read_aloud:
+                cursor = mAdapter.getCursor();
+                if (cursor == null || !cursor.moveToPosition(mCurrentPosition))
+                    return true;
+                text = mChanThreadView.formattedSubCom(cursor);
                 mSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
                 return true;
             default:

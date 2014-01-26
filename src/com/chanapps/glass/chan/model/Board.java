@@ -27,6 +27,9 @@ public class Board {
     public static final String TIM_COLUMN = "tim";
     public static final String REPLIES_COLUMN = "replies";
     public static final String IMAGES_COLUMN = "images";
+    public static final String FILENAME_COLUMN = "filename";
+    public static final String EXT_COLUMN = "ext";
+    public static final String FSIZE_COLUMN = "fsize";
     public static final String[] COLUMNS = {
             BOARD_COLUMN,
             NO_COLUMN,
@@ -34,7 +37,10 @@ public class Board {
             COM_COLUMN,
             TIM_COLUMN,
             REPLIES_COLUMN,
-            IMAGES_COLUMN
+            IMAGES_COLUMN,
+            FILENAME_COLUMN,
+            EXT_COLUMN,
+            FSIZE_COLUMN
     };
     public static final JSONType[] TYPES = {
             JSONType.STRING,
@@ -43,7 +49,10 @@ public class Board {
             JSONType.OPT_STRING,
             JSONType.OPT_LONG,
             JSONType.OPT_INTEGER,
-            JSONType.OPT_INTEGER
+            JSONType.OPT_INTEGER,
+            JSONType.OPT_STRING,
+            JSONType.OPT_STRING,
+            JSONType.OPT_LONG
     };
 
     public Cursor loadPageCursor(String board) {

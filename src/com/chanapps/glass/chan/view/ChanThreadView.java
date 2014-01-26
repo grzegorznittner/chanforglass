@@ -28,12 +28,12 @@ public class ChanThreadView {
     private static final String KB_FORMAT = "0";
 
     private Context mContext;
-    private CardScrollView mCardScrollView;
-    private int mSelectedPosition = -1;
+    //private CardScrollView mCardScrollView;
+    //private int mSelectedPosition = -1;
 
     public ChanThreadView(Context context, CardScrollView cardScrollView) {
         mContext = context;
-        mCardScrollView = cardScrollView;
+        //mCardScrollView = cardScrollView;
     }
 
     public CardCursorAdapter.NewCardCallback newCardCallback() {
@@ -41,47 +41,8 @@ public class ChanThreadView {
             @Override
             public Card newCard(Cursor cursor) {
                 final Card card = new Card(mContext);
-                String sub = cursor.getString(cursor.getColumnIndex(ChanThread.SUB_COLUMN));
-                String com = cursor.getString(cursor.getColumnIndex(ChanThread.COM_COLUMN));
-                String text;
-                if (sub != null && !sub.isEmpty() && com != null && !com.isEmpty())
-                    text = String.format(SUB_AND_COM_FORMAT, sub, com);
-                else if (sub != null && !sub.isEmpty())
-                    text = String.format(SUB_FORMAT, sub);
-                else if (com != null && !com.isEmpty())
-                    text = String.format(COM_FORMAT, com);
-                else
-                    text = "";
-                text = Text.filter(text);
-                card.setText(text);
-
-                String board = cursor.getString(cursor.getColumnIndex(ChanThread.BOARD_COLUMN));
-                long no = cursor.getLong(cursor.getColumnIndex(ChanThread.NO_COLUMN));
-                long resto = cursor.getLong(cursor.getColumnIndex(ChanThread.RESTO_COLUMN));
-                long threadNo = resto == 0 ? no : resto;
-                int pos = cursor.getPosition();
-                int count = cursor.getCount();
-                long fsize = cursor.getLong(cursor.getColumnIndex(ChanThread.FSIZE_COLUMN));
-                String ext = cursor.getString(cursor.getColumnIndex(ChanThread.EXT_COLUMN));
-                if (fsize > 0) {
-                    String fdisplaysize;
-                    String fdesc;
-                    if (fsize > MB) {
-                        fdisplaysize = new DecimalFormat(MB_FORMAT).format((float) fsize / (float) MB);
-                        fdesc = mContext.getString(R.string.mb_abbrev);
-                    }
-                    else {
-                        fdisplaysize = new DecimalFormat(KB_FORMAT).format((float) fsize / (float) KB);
-                        fdesc = mContext.getString(R.string.kb_abbrev);
-                    }
-                    if (ext != null && ext.startsWith("."))
-                        ext = ext.replaceFirst("\\.", "");
-                    card.setFootnote(mContext.getString(R.string.thread_with_image_footnote_format,
-                            board, threadNo, pos + 1, count, fdisplaysize, fdesc, ext));
-                }
-                else {
-                    card.setFootnote(mContext.getString(R.string.thread_footnote_format, board, threadNo, pos + 1, count));
-                }
+                card.setText(formattedSubCom(cursor));
+                card.setFootnote(formattedFootnote(cursor));
                 /*
                 long tim = cursor.getLong(cursor.getColumnIndex(Board.TIM_COLUMN));
                 if (tim > 0 && mCardScrollView != null && mCardScrollView.getSelectedItemPosition() == pos) {
@@ -107,6 +68,36 @@ public class ChanThreadView {
         else
             text = "";
         return Text.filter(text);
+    }
+
+    private String formattedFootnote(Cursor cursor) {
+        String board = cursor.getString(cursor.getColumnIndex(ChanThread.BOARD_COLUMN));
+        long no = cursor.getLong(cursor.getColumnIndex(ChanThread.NO_COLUMN));
+        long resto = cursor.getLong(cursor.getColumnIndex(ChanThread.RESTO_COLUMN));
+        long threadNo = resto == 0 ? no : resto;
+        int pos = cursor.getPosition();
+        int count = cursor.getCount();
+        long fsize = cursor.getLong(cursor.getColumnIndex(ChanThread.FSIZE_COLUMN));
+        String ext = cursor.getString(cursor.getColumnIndex(ChanThread.EXT_COLUMN));
+        if (fsize > 0) {
+            String fdisplaysize;
+            String fdesc;
+            if (fsize > MB) {
+                fdisplaysize = new DecimalFormat(MB_FORMAT).format((float) fsize / (float) MB);
+                fdesc = mContext.getString(R.string.mb_abbrev);
+            }
+            else {
+                fdisplaysize = new DecimalFormat(KB_FORMAT).format((float) fsize / (float) KB);
+                fdesc = mContext.getString(R.string.kb_abbrev);
+            }
+            if (ext != null && ext.startsWith("."))
+                ext = ext.replaceFirst("\\.", "");
+            return mContext.getString(R.string.thread_with_image_footnote_format,
+                    board, threadNo, pos + 1, count, fdisplaysize, fdesc, ext);
+        }
+        else {
+            return mContext.getString(R.string.thread_footnote_format, board, threadNo, pos + 1, count);
+        }
     }
 
     /*
