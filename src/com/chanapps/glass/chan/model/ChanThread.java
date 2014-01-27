@@ -23,6 +23,8 @@ public class ChanThread {
     public static final String SUB_COLUMN = "sub";
     public static final String COM_COLUMN = "com";
     public static final String TIM_COLUMN = "tim";
+    public static final String REPLIES_COLUMN = "replies";
+    public static final String IMAGES_COLUMN = "images";
     public static final String FILENAME_COLUMN = "filename";
     public static final String EXT_COLUMN = "ext";
     public static final String FSIZE_COLUMN = "fsize";
@@ -33,6 +35,8 @@ public class ChanThread {
             SUB_COLUMN,
             COM_COLUMN,
             TIM_COLUMN,
+            REPLIES_COLUMN,
+            IMAGES_COLUMN,
             FILENAME_COLUMN,
             EXT_COLUMN,
             FSIZE_COLUMN
@@ -43,6 +47,8 @@ public class ChanThread {
             JSONType.LONG,
             JSONType.OPT_STRING,
             JSONType.OPT_STRING,
+            JSONType.OPT_LONG,
+            JSONType.OPT_LONG,
             JSONType.OPT_LONG,
             JSONType.OPT_STRING,
             JSONType.OPT_STRING,

@@ -12,7 +12,7 @@ public class Text {
         return text
                 .replaceAll("<br/?>", "\n")
                 .replaceAll("<[^>]*>", "")
-                .replaceAll("&#039;", "'")
+                .replaceAll("&#039;|&quot;", "'")
                 .replaceAll("&amp;", "&")
                 .replaceAll("&lt;", "<")
                 .replaceAll("&gt;", ">");

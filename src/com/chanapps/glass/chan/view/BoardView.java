@@ -3,8 +3,12 @@ package com.chanapps.glass.chan.view;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.chanapps.glass.chan.R;
 import com.chanapps.glass.chan.model.Board;
 import com.chanapps.glass.chan.model.ChanThread;
@@ -12,8 +16,10 @@ import com.chanapps.glass.chan.model.Text;
 import com.chanapps.glass.chan.util.CardCursorAdapter;
 import com.chanapps.glass.chan.util.CardCursorScrollAdapter;
 import com.chanapps.glass.chan.util.CardImageLoader;
+import com.chanapps.glass.chan.util.ViewCursorAdapter;
 import com.google.android.glass.app.Card;
 import com.google.android.glass.widget.CardScrollView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.DecimalFormat;
 
@@ -40,29 +46,29 @@ public class BoardView {
     private static final String KB_FORMAT = "0";
 
     private Context mContext;
-    //private CardScrollView mCardScrollView;
-    //private int mSelectedPosition = -1;
 
-    public BoardView(Context context, CardScrollView cardScrollView) {
+    public BoardView(Context context) {
         mContext = context;
-        //mCardScrollView = cardScrollView;
     }
 
-    public CardCursorAdapter.NewCardCallback newCardCallback() {
-        return new CardCursorAdapter.NewCardCallback() {
+    public ViewCursorAdapter.NewViewCallback newViewCallback() {
+        return new ViewCursorAdapter.NewViewCallback() {
             @Override
-            public Card newCard(Cursor cursor) {
-                final Card card = new Card(mContext);
-                card.setText(formattedSubCom(cursor));
-                card.setFootnote(formattedFootnote(cursor));
-                /*
+            public View newView(Cursor cursor) {
+                ViewGroup layout = (ViewGroup)LayoutInflater.from(mContext).inflate(R.layout.card_with_full_image, null);
+                TextView text = (TextView)layout.findViewById(R.id.text);
+                TextView footnote = (TextView)layout.findViewById(R.id.footnote);
+                ImageView image = (ImageView)layout.findViewById(R.id.image);
+
+                text.setText(formattedSubCom(cursor));
+                footnote.setText(formattedFootnote(cursor));
                 long tim = cursor.getLong(cursor.getColumnIndex(Board.TIM_COLUMN));
-                if (tim > 0 && mCardScrollView != null && mCardScrollView.getSelectedItemPosition() == pos) {
+                if (tim > 0) {
+                    String board = cursor.getString(cursor.getColumnIndex(Board.BOARD_COLUMN));
                     String url = String.format(Board.THUMBNAIL_FORMAT, board, tim);
-                    CardImageLoader.loadCardImage(card, Card.ImageLayout.FULL, url, mCardScrollView);
+                    ImageLoader.getInstance().displayImage(url, image);
                 }
-                */
-                return card;
+                return layout;
             }
         };
     }
@@ -84,9 +90,6 @@ public class BoardView {
 
     private String formattedFootnote(Cursor cursor) {
         String board = cursor.getString(cursor.getColumnIndex(Board.BOARD_COLUMN));
-        long no = cursor.getLong(cursor.getColumnIndex(Board.NO_COLUMN));
-        int pos = cursor.getPosition();
-        int count = cursor.getCount();
         int replies = cursor.getInt(cursor.getColumnIndex(Board.REPLIES_COLUMN));
         int images = cursor.getInt(cursor.getColumnIndex(Board.IMAGES_COLUMN));
 
@@ -106,29 +109,11 @@ public class BoardView {
             if (ext != null && ext.startsWith("."))
                 ext = ext.replaceFirst("\\.", "");
             return mContext.getString(R.string.board_with_image_footnote_format,
-                    board, pos + 1, count, replies, images, fdisplaysize, fdesc, ext);
+                    board, replies, images, fdisplaysize, fdesc, ext);
         }
         else {
-            return mContext.getString(R.string.board_footnote_format, board, pos + 1, count, replies, images);
+            return mContext.getString(R.string.board_footnote_format, board, replies, images);
         }
     }
     
-    /*
-    public AdapterView.OnItemSelectedListener onItemSelectedListener() {
-        return new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == mSelectedPosition)
-                    return;
-                mSelectedPosition = position;
-                if (mCardScrollView != null)
-                    mCardScrollView.updateViews(true);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        };
-    }
-    */
-
 }

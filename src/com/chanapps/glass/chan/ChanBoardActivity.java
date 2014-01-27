@@ -5,22 +5,21 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import com.chanapps.glass.chan.model.Board;
 import com.chanapps.glass.chan.model.BoardList;
 import com.chanapps.glass.chan.model.CursorLoadCallback;
-import com.chanapps.glass.chan.util.CardCursorScrollAdapter;
 import com.chanapps.glass.chan.util.CardImageLoader;
 import com.chanapps.glass.chan.util.JSONLoaderCallbacks;
+import com.chanapps.glass.chan.util.ViewCursorScrollAdapter;
 import com.chanapps.glass.chan.view.BoardView;
+import com.chanapps.glass.chan.view.SimulatedScrollBar;
 import com.google.android.glass.widget.CardScrollView;
 
 public class ChanBoardActivity extends Activity {
@@ -33,7 +32,8 @@ public class ChanBoardActivity extends Activity {
     private TextToSpeech mSpeech;
     private ProgressBar mProgressBar;
     private CardScrollView mCardScrollView;
-    private CardCursorScrollAdapter mAdapter;
+    private SimulatedScrollBar mSimulatedScrollBar;
+    private ViewCursorScrollAdapter mAdapter;
     private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
     private String mBoard;
     private BoardView mBoardView;
@@ -60,17 +60,19 @@ public class ChanBoardActivity extends Activity {
         });
         CardImageLoader.init(this);
 
-        View rootLayout = getLayoutInflater().inflate(R.layout.card_scroll_with_progress_layout, null);
+        View rootLayout = getLayoutInflater().inflate(R.layout.card_scroll_layout, null);
         mProgressBar = (ProgressBar)rootLayout.findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
         setContentView(rootLayout);
 
         mCardScrollView = (CardScrollView)rootLayout.findViewById(R.id.card_scroll_view);
 
-        mBoardView = new BoardView(this, mCardScrollView);
-        mAdapter = new CardCursorScrollAdapter();
+        mBoardView = new BoardView(this);
+        mAdapter = new ViewCursorScrollAdapter();
         mAdapter.setIdColumn(Board.BOARD_COLUMN);
-        mAdapter.setNewCardCallback(mBoardView.newCardCallback());
+        mAdapter.setNewViewCallback(mBoardView.newViewCallback());
+
+        mSimulatedScrollBar = (SimulatedScrollBar)rootLayout.findViewById(R.id.simulated_scroll_bar);
 
         mCardScrollView.setAdapter(mAdapter);
         mCardScrollView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -80,9 +82,18 @@ public class ChanBoardActivity extends Activity {
                 openOptionsMenu();
             }
         });
-        //mCardScrollView.setOnItemSelectedListener(mBoardView.onItemSelectedListener());
+        mCardScrollView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mSimulatedScrollBar != null)
+                    mSimulatedScrollBar.setScrollPosition(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
-        mCallbacks = new JSONLoaderCallbacks(this, mAdapter, mProgressBar, mCardScrollView,
+        mCallbacks = new JSONLoaderCallbacks(this, mAdapter, mProgressBar, mCardScrollView, mSimulatedScrollBar,
                 new CursorLoadCallback() {
                     @Override
                     public Cursor loadCursor() {

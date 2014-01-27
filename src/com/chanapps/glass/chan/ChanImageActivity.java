@@ -55,7 +55,7 @@ public class ChanImageActivity extends Activity {
 
         CardImageLoader.init(this);
 
-        View rootLayout = getLayoutInflater().inflate(R.layout.card_scroll_with_progress_layout, null);
+        View rootLayout = getLayoutInflater().inflate(R.layout.card_scroll_layout, null);
         mProgressBar = (ProgressBar)rootLayout.findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
         setContentView(rootLayout);

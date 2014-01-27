@@ -14,14 +14,35 @@
      limitations under the License.
 -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/black">
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:custom="http://schemas.android.com/apk/res/com.chanapps.glass.chan"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
 
     <com.google.android.glass.widget.CardScrollView
-        android:id="@+id/card_scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            android:id="@+id/card_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:indeterminate="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            />
+
+    <com.chanapps.glass.chan.view.SimulatedScrollBar
+            android:id="@+id/simulated_scroll_bar"
+            android:layout_width="match_parent"
+            android:layout_height="10px"
+            android:layout_gravity="bottom"
+            custom:numItems="0"
+            custom:scrollPosition="0"
+            />
 
 </FrameLayout>

@@ -1,6 +1,7 @@
 package com.chanapps.glass.chan.util;
 
 import android.database.Cursor;
+import android.view.View;
 import com.google.android.glass.app.Card;
 
 /**
@@ -10,11 +11,11 @@ import com.google.android.glass.app.Card;
 * Time: 5:22 PM
 * To change this template use File | Settings | File Templates.
 */
-public interface CardCursorAdapter extends SwapCursorAdapter {
+public interface ViewCursorAdapter extends SwapCursorAdapter {
     Cursor getCursor();
     void setIdColumn(String column);
-    void setNewCardCallback(NewCardCallback callback);
-    public interface NewCardCallback {
-        Card newCard(Cursor cursor);
+    void setNewViewCallback(NewViewCallback callback);
+    public interface NewViewCallback {
+        View newView(Cursor cursor);
     }
 }

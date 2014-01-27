@@ -48,10 +48,12 @@ public class BoardList {
 
     public Cursor loadCursor(boolean showNSFW) {
         List<BoardRow> rows = loadListFromJson(URL, COLUMNS, TYPES, BOARDS_KEY, INITIAL_CAPACITY);
+        MatrixCursor cursor =  new MatrixCursor(COLUMNS, rows.size());
+        if (rows.size() == 0)
+            return cursor;
         if (DEBUG) Log.i(TAG, "first row:" + rows.get(0));
         Collections.sort(rows, new AlphanumComparator<BoardRow>());
         if (DEBUG) Log.i(TAG, "first row after sort:" + rows.get(0));
-        MatrixCursor cursor =  new MatrixCursor(COLUMNS, rows.size());
         for (BoardRow row : rows) {
             if (showNSFW || row.isWorksafe())
                 cursor.addRow(row.mRow);

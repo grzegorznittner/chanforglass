@@ -17,6 +17,7 @@ import com.chanapps.glass.chan.model.CursorLoadCallback;
 import com.chanapps.glass.chan.util.CardCursorScrollAdapter;
 import com.chanapps.glass.chan.util.JSONLoaderCallbacks;
 import com.chanapps.glass.chan.view.BoardListView;
+import com.chanapps.glass.chan.view.SimulatedScrollBar;
 import com.google.android.glass.widget.CardScrollView;
 
 public class ChanBoardListActivity extends Activity {
@@ -28,6 +29,7 @@ public class ChanBoardListActivity extends Activity {
     private TextToSpeech mSpeech;
     private ProgressBar mProgressBar;
     private CardScrollView mCardScrollView;
+    private SimulatedScrollBar mSimulatedScrollBar;
     private CardCursorScrollAdapter mAdapter;
     private LoaderManager.LoaderCallbacks<Cursor> mCallbacks;
     private int mCurrentPosition = -1;
@@ -50,7 +52,7 @@ public class ChanBoardListActivity extends Activity {
 
         mBoardListView = new BoardListView(this);
 
-        View rootLayout = getLayoutInflater().inflate(R.layout.card_scroll_with_progress_layout, null);
+        View rootLayout = getLayoutInflater().inflate(R.layout.card_scroll_layout, null);
         mProgressBar = (ProgressBar)rootLayout.findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
         setContentView(rootLayout);
@@ -58,6 +60,8 @@ public class ChanBoardListActivity extends Activity {
         mAdapter = new CardCursorScrollAdapter();
         mAdapter.setIdColumn(BoardList.BOARD_COLUMN);
         mAdapter.setNewCardCallback(mBoardListView.newCardCallback());
+
+        mSimulatedScrollBar = (SimulatedScrollBar)rootLayout.findViewById(R.id.simulated_scroll_bar);
 
         mCardScrollView = (CardScrollView)rootLayout.findViewById(R.id.card_scroll_view);
         mCardScrollView.setAdapter(mAdapter);
@@ -68,7 +72,18 @@ public class ChanBoardListActivity extends Activity {
                 openOptionsMenu();
             }
         });
-        mCallbacks = new JSONLoaderCallbacks(this, mAdapter, mProgressBar, mCardScrollView,
+        mCardScrollView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mSimulatedScrollBar != null)
+                    mSimulatedScrollBar.setScrollPosition(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        mCallbacks = new JSONLoaderCallbacks(this, mAdapter, mProgressBar, mCardScrollView, mSimulatedScrollBar,
                 new CursorLoadCallback() {
                     @Override
                     public Cursor loadCursor() {

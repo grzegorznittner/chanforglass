@@ -7,7 +7,10 @@ import android.text.StaticLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.chanapps.glass.chan.view.SimulatedScrollBar;
 import com.google.android.glass.app.Card;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
@@ -28,6 +31,7 @@ public class ChanTextActivity extends Activity {
 
     private String mText;
     private CardScrollView mCardScrollView;
+    private SimulatedScrollBar mSimulatedScrollBar;
     private TextCardScrollAdapter mAdapter;
     private List<Card> mCards;
 
@@ -48,9 +52,29 @@ public class ChanTextActivity extends Activity {
         mAdapter = new TextCardScrollAdapter();
 
         View rootLayout = getLayoutInflater().inflate(R.layout.card_scroll_layout, null);
+
+        ProgressBar progressBar = (ProgressBar)rootLayout.findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
+
+        mSimulatedScrollBar = (SimulatedScrollBar)rootLayout.findViewById(R.id.simulated_scroll_bar);
+        mSimulatedScrollBar.setScrollPosition(0);
+        mSimulatedScrollBar.setNumItems(mAdapter.getCount());
+
         mCardScrollView = (CardScrollView)rootLayout.findViewById(R.id.card_scroll_view);
         mCardScrollView.setAdapter(mAdapter);
+        mCardScrollView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mSimulatedScrollBar != null)
+                    mSimulatedScrollBar.setScrollPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
         mCardScrollView.activate();
+
         setContentView(rootLayout);
     }
 
@@ -80,8 +104,6 @@ public class ChanTextActivity extends Activity {
             String cardText = mText.substring(startOffset, endOffset);
             Card card = new Card(this);
             card.setText(cardText);
-            String cardFootnote = getString(R.string.read_more_format, cardNum + 1, numCards);
-            card.setFootnote(cardFootnote);
             mCards.add(card);
         }
     }
