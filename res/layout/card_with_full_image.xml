@@ -24,7 +24,7 @@
         android:layout_height="90px"
         android:layout_marginBottom="70px"
         android:layout_gravity="center_horizontal|bottom"
-        android:gravity="top|left"
+        android:gravity="bottom|left"
         android:textSize="34px"
         android:maxLines="2"
         />

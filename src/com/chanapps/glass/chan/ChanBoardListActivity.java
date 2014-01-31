@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
@@ -133,6 +134,11 @@ public class ChanBoardListActivity extends Activity {
                 PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(SHOW_NSFW, mShowNSFW).apply();
                 getLoaderManager().restartLoader(LOADER_ID, null, mCallbacks);
                 recreate();
+                return true;
+            case R.id.about:
+                Uri uri = Uri.parse(getString(R.string.about_url));
+                intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

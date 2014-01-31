@@ -14,4 +14,8 @@
      limitations under the License.
 -->
 
-<trigger keyword="@string/show_root_card_voice_trigger"/>
+<trigger keyword="@string/show_root_card_voice_trigger">
+    <constraints
+        network="true"
+        />
+</trigger>

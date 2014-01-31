@@ -33,4 +33,9 @@
         android:icon="@drawable/ic_gear_50"
         android:visible="false"
             />
+    <item
+        android:id="@+id/about"
+        android:title="@string/about"
+        android:icon="@drawable/ic_world_50"
+            />
 </menu>

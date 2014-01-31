@@ -20,9 +20,9 @@
     <string name="app_name">Chan for Glass</string>
     <string name="app_mantra">4chan Reloaded</string>
     <string name="show_root_card_voice_trigger">Read chan</string> <!-- really wish we had "Read" -->
-    <string name="view_board">View Board</string>
-    <string name="view_thread">View Thread</string>
-    <string name="view_image">View Image</string>
+    <string name="view_board">View board</string>
+    <string name="view_thread">View thread</string>
+    <string name="view_image">View image</string>
     <string name="board_footnote_format">/%1$s/ ~ %2$d posts %3$d images</string>
     <string name="board_with_image_footnote_format">/%1$s/ ~ %2$d posts %3$d images ~ %4$s%5$s %6$s</string>
     <string name="thread_footnote_format">/%1$s/%2$d ~ %3$d posts %4$d images</string>
@@ -84,6 +84,9 @@
     <string name="read_aloud">Read aloud</string>
     <string name="show_nsfw">Show NSFW</string>
     <string name="hide_nsfw">Hide NSFW</string>
+    <string name="about">About</string>
     <string name="stop">Stop</string>
+
+    <string name="about_url">https://www.strikingly.com/chanforglass</string>
 
 </resources>
